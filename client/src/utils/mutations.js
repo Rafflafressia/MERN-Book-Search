@@ -1,61 +1,70 @@
-import {gql} from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const LOGIN_USER = gql`
-    mutation login($email: String!, $password: String!) {
-        login(email: $email, password: $password) {
-            token
-            user {
-                _id
-                username
-            }
-        }
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+      }
     }
-    `;
+  }
+`;
 
 export const ADD_USER = gql`
-    mutation addUser($username: String!, $email: String!, $password: String!) {
-        addUser(username: $username, email: $email, password: $password) {
-            token
-            user {
-                _id
-                username
-            }
-        }
+  mutation addUser($username: String!, $email: String!, $password: String!) {
+    createUser(username: $username, email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+      }
     }
-    `;
+  }
+`;
 
 export const SAVE_BOOK = gql`
-    mutation saveBook($bookData: BookInput!) {
-        saveBook(bookData: $bookData) {
-            _id
-            username
-            email
-            savedBooks {
-                bookId
-                authors
-                description
-                title
-                image
-                link
-            }
-        }
+  mutation saveBook(
+    $author: [String]
+    $description: String!
+    $title: String!
+    $bookId: String!
+    $image: String
+    $link: String
+  ) {
+    saveBook(bookData: $bookData) {
+      _id
+      username
+      email
+      savedBooks {
+        bookId
+        authors
+        description
+        title
+        image
+        link
+      }
     }
-    `;
+  }
+`;
 
 export const REMOVE_BOOK = gql`
-    mutation removeBook($bookId: ID!) {
-        removeBook(bookId: $bookId) {
-            _id
-            username
-            email
-            savedBooks {
-                bookId
-                authors
-                description
-                title
-                image
-                link
-            }
-        }
+  mutation removeBook($bookId: ID!) {
+    removeBook(bookId: $bookId) {
+      _id
+      username
+      email
+      savedBooks {
+        bookId
+        authors
+        description
+        title
+        image
+        link
+      }
     }
-    `;
+  }
+`;

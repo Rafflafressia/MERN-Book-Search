@@ -9,7 +9,6 @@ import {
 } from 'react-bootstrap';
 
 import Auth from '../utils/auth';
-import {searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import {useMutation} from '@apollo/client';
 import {SAVE_BOOK} from '../utils/mutations';
