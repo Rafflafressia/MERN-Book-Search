@@ -8,7 +8,7 @@ const { expressMiddleware } = require("@apollo/server/express4");
 // Import the two parts of GraphQL schema
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
-const authMiddleware = require("./utils/auth");
+const {authMiddleware} = require("./utils/auth");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
