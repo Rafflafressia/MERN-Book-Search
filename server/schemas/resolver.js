@@ -1,5 +1,5 @@
 const { User } = require("../models");
-const { signToken, AuthenticationError } = require("../utils/auth");
+const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
@@ -10,22 +10,22 @@ const resolvers = {
         );
         return userData;
       }
-      throw new AuthenticationError("You need to be logged in!");
+      throw new Error("You need to be logged in!");
     },
   },
 
   Mutation: {
     login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email, password });
+      const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError("Incorrect credentials");
+        throw new Error("You need to be logged in!");
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError("Incorrect credentials");
+        throw new Error("You need to be logged in!");
       }
 
       const token = signToken(user);
@@ -33,24 +33,32 @@ const resolvers = {
     },
 
     createUser: async (parent, { username, email, password }) => {
-      const user = await User.create({username, email, password});
+      const user = await User.create({ username, email, password });
       const token = signToken(user);
 
       return { token, user };
     },
 
-    saveBook: async (parent, { bookData }, context) => {
+    saveBook: async (
+      parent,
+      { bookId, authors, description, image, title, link },
+      context
+    ) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: bookData } },
+          {
+            $addToSet: {
+              savedBooks: { bookId, authors, description, image, title, link },
+            },
+          },
           { new: true, runValidators: true }
         );
 
         return updatedUser;
       }
 
-      throw new AuthenticationError("You need to be logged in!");
+      throw new Error("You need to be logged in!");
     },
 
     removeBook: async (parent, { bookId }, context) => {
@@ -64,7 +72,7 @@ const resolvers = {
         return updatedUser;
       }
 
-      throw new AuthenticationError("You need to be logged in!");
+      throw new Error("You need to be logged in!");
     },
   },
 };
